@@ -1,0 +1,871 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg-color: #f0f2f5;
+    --chat-bg: #ffffff;
+    --user-msg-bg: #0084ff;
+    --bot-msg-bg: #e4e6eb;
+    --text-color: #050505;
+    --user-text-color: #ffffff;
+    --input-bg: #ffffff;
+    --border-color: #ced0d4;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --google-blue: #4285F4;
+    --google-blue-hover: #357ae8;
+    --error-color: #d93025;
+    --error-bg-color: #fbe9e7;
+  }
+
+  /* Ensure app uses dynamic viewport height and stable scrolling on mobile */
+  html, body, #root {
+    height: 100%;
+    min-height: 100dvh;
+    overscroll-behavior-y: contain;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    overflow: hidden;
+    height: 100%;
+    min-height: 100dvh;
+  }
+
+  .app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  /* --- Login Page Styles --- */
+  .login-container {
+    padding: 2rem 3rem 3rem 3rem;
+    background-color: var(--chat-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+  }
+
+  .login-container h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .login-container p {
+    color: #65676b;
+    margin-bottom: 2rem;
+  }
+
+  .google-signin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--google-blue);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .google-signin-btn:hover {
+    background-color: var(--google-blue-hover);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  
+  .google-signin-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .error-message {
+    background-color: var(--error-bg-color);
+    color: var(--error-color);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  /* --- Chat Page Styles --- */
+  .chat-container {
+    width: 100%;
+    max-width: 600px;
+    height: 90vh;
+    max-height: 800px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--chat-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    overflow: hidden;
+  }
+
+  .header {
+    padding: 0.75rem 1rem;
+    background-color: #fff;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .user-info span {
+    font-size: 0.85rem;
+    color: #65676b;
+  }
+  
+  .signout-btn {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    background-color: #e4e6eb;
+    color: #050505;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+
+  .signout-btn:hover {
+    background-color: #d8dade;
+  }
+
+  .chat-window {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .chat-message {
+    display: flex;
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 18px;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+
+  .chat-message.user {
+    background-color: var(--user-msg-bg);
+    color: var(--user-text-color);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .chat-message.bot {
+    background-color: var(--bot-msg-bg);
+    color: var(--text-color);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  
+  .loading-indicator {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+  }
+
+  .loading-indicator .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ccc;
+    animation: bounce 1.4s infinite ease-in-out both;
+  }
+  
+  .loading-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
+  .loading-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1.0); }
+  }
+
+  .chat-input-row {
+    display: flex;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    background-color: #fff;
+  }
+
+  .chat-input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    background-color: var(--input-bg);
+  }
+  
+  .chat-input:focus {
+    outline: none;
+    border-color: var(--user-msg-bg);
+  }
+
+  .send-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: var(--user-msg-bg);
+    color: white;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+
+  .send-btn:hover:not(:disabled) {
+    background-color: #0073e6;
+  }
+
+  .send-btn:disabled {
+    background-color: #a0d2ff;
+    cursor: not-allowed;
+  }
+
+  /* Crystal Background Animation */
+  .crystal {
+    position: absolute;
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transform: rotate(45deg);
+    animation: crystalFloat 8s ease-in-out infinite;
+    opacity: 0.6;
+  }
+
+  .crystal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    animation: crystalShine 4s ease-in-out infinite;
+  }
+
+  .crystal-1 {
+    width: 60px;
+    height: 60px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .crystal-2 {
+    width: 40px;
+    height: 40px;
+    top: 25%;
+    right: 15%;
+    animation-delay: 1s;
+  }
+
+  .crystal-3 {
+    width: 80px;
+    height: 80px;
+    top: 60%;
+    left: 5%;
+    animation-delay: 2s;
+  }
+
+  .crystal-4 {
+    width: 50px;
+    height: 50px;
+    top: 75%;
+    right: 20%;
+    animation-delay: 3s;
+  }
+
+  .crystal-5 {
+    width: 35px;
+    height: 35px;
+    top: 40%;
+    left: 70%;
+    animation-delay: 4s;
+  }
+
+  .crystal-6 {
+    width: 70px;
+    height: 70px;
+    top: 15%;
+    left: 60%;
+    animation-delay: 5s;
+  }
+
+  .crystal-7 {
+    width: 45px;
+    height: 45px;
+    top: 85%;
+    left: 40%;
+    animation-delay: 6s;
+  }
+
+  .crystal-8 {
+    width: 55px;
+    height: 55px;
+    top: 50%;
+    right: 5%;
+    animation-delay: 7s;
+  }
+
+  @keyframes crystalFloat {
+    0%, 100% {
+      transform: rotate(45deg) translateY(0px) scale(1);
+      opacity: 0.6;
+    }
+    25% {
+      transform: rotate(45deg) translateY(-10px) scale(1.05);
+      opacity: 0.8;
+    }
+    50% {
+      transform: rotate(45deg) translateY(-5px) scale(1.1);
+      opacity: 0.7;
+    }
+    75% {
+      transform: rotate(45deg) translateY(-15px) scale(1.05);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes crystalShine {
+    0%, 100% {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(100%);
+    }
+  }
+
+  /* Content Area Crystals */
+  .crystal-content-1 {
+    width: 45px;
+    height: 45px;
+    top: 5%;
+    left: 15%;
+    animation-delay: 0.5s;
+  }
+
+  .crystal-content-2 {
+    width: 35px;
+    height: 35px;
+    top: 20%;
+    right: 10%;
+    animation-delay: 1.5s;
+  }
+
+  .crystal-content-3 {
+    width: 60px;
+    height: 60px;
+    top: 45%;
+    left: 5%;
+    animation-delay: 2.5s;
+  }
+
+  .crystal-content-4 {
+    width: 40px;
+    height: 40px;
+    top: 60%;
+    right: 20%;
+    animation-delay: 3.5s;
+  }
+
+  .crystal-content-5 {
+    width: 50px;
+    height: 50px;
+    top: 80%;
+    left: 25%;
+    animation-delay: 4.5s;
+  }
+
+  .crystal-content-6 {
+    width: 30px;
+    height: 30px;
+    top: 30%;
+    left: 70%;
+    animation-delay: 5.5s;
+  }
+
+  .crystal-content-7 {
+    width: 55px;
+    height: 55px;
+    top: 70%;
+    right: 5%;
+    animation-delay: 6.5s;
+  }
+
+  .crystal-content-8 {
+    width: 40px;
+    height: 40px;
+    top: 90%;
+    left: 60%;
+    animation-delay: 7.5s;
+  }
+
+  /* Responsive adjustments for crystals */
+  @media (max-width: 768px) {
+    .crystal {
+      transform: scale(0.7) rotate(45deg);
+    }
+    
+    .crystal-1, .crystal-2, .crystal-3, .crystal-4,
+    .crystal-5, .crystal-6, .crystal-7, .crystal-8,
+    .crystal-content-1, .crystal-content-2, .crystal-content-3, .crystal-content-4,
+    .crystal-content-5, .crystal-content-6, .crystal-content-7, .crystal-content-8 {
+      animation-duration: 6s;
+    }
+  }
+
+  /* Dark Theme Classes */
+  .dark-theme {
+    --bg-color: #1a1a1a;
+    --chat-bg: #2d2d2d;
+    --user-msg-bg: #0084ff;
+    --bot-msg-bg: #404040;
+    --text-color: #ffffff;
+    --user-text-color: #ffffff;
+    --input-bg: #404040;
+    --border-color: #404040;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .light-theme {
+    --bg-color: #f0f2f5;
+    --chat-bg: #ffffff;
+    --user-msg-bg: #0084ff;
+    --bot-msg-bg: #e4e6eb;
+    --text-color: #050505;
+    --user-text-color: #ffffff;
+    --input-bg: #ffffff;
+    --border-color: #ced0d4;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* Component-specific dark theme classes */
+  .dark-theme .bg-white {
+    background-color: #2d2d2d !important;
+  }
+
+  .dark-theme .bg-gray-50 {
+    background-color: #404040 !important;
+  }
+
+  .dark-theme .bg-gray-100 {
+    background-color: #404040 !important;
+  }
+
+  .dark-theme .bg-gray-200 {
+    background-color: #505050 !important;
+  }
+
+  .dark-theme .bg-gray-800 {
+    background-color: #2d2d2d !important;
+  }
+
+  .dark-theme .bg-gray-900 {
+    background-color: #1a1a1a !important;
+  }
+
+  .dark-theme .text-gray-500 {
+    color: #a0a0a0 !important;
+  }
+
+  .dark-theme .text-gray-600 {
+    color: #b0b0b0 !important;
+  }
+
+  .dark-theme .text-gray-700 {
+    color: #c0c0c0 !important;
+  }
+
+  .dark-theme .text-gray-800 {
+    color: #d0d0d0 !important;
+  }
+
+  .dark-theme .text-gray-900 {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .text-black {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .border-gray-200 {
+    border-color: #404040 !important;
+  }
+
+  .dark-theme .border-gray-300 {
+    border-color: #505050 !important;
+  }
+
+  .dark-theme .border-gray-600 {
+    border-color: #606060 !important;
+  }
+
+  .dark-theme .hover\:bg-gray-100:hover {
+    background-color: #505050 !important;
+  }
+
+  .dark-theme .hover\:bg-gray-200:hover {
+    background-color: #606060 !important;
+  }
+
+  .dark-theme .hover\:bg-gray-700:hover {
+    background-color: #505050 !important;
+  }
+
+  .dark-theme .placeholder-gray-500::placeholder {
+    color: #a0a0a0 !important;
+  }
+
+  .dark-theme .placeholder-gray-400::placeholder {
+    color: #808080 !important;
+  }
+
+  /* Teams Composer specific dark theme */
+  .dark-theme .teams-composer {
+    background-color: #1a1a1a;
+  }
+
+  .dark-theme .teams-sidebar {
+    background-color: #2d2d2d;
+    border-color: #404040;
+  }
+
+  .dark-theme .teams-header {
+    background-color: #2d2d2d;
+    border-color: #404040;
+  }
+
+  .dark-theme .teams-chat-area {
+    background-color: #1a1a1a;
+  }
+
+  .dark-theme .teams-input-area {
+    background-color: #2d2d2d;
+    border-color: #404040;
+  }
+
+  .dark-theme .teams-message-bot {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-chat-area {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+
+  .dark-theme .teams-chat-area .text-2xl {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-chat-area .text-sm {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-chat-area .text-xs {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-header h1 {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-sidebar .text-xs {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-sidebar .text-sm {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-input-area textarea {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-input-area textarea::placeholder {
+    color: #808080 !important;
+  }
+
+  /* Additional Teams Composer text styling */
+  .dark-theme .teams-composer .text-gray-400 {
+    color: #a0a0a0 !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-500 {
+    color: #a0a0a0 !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-600 {
+    color: #b0b0b0 !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-700 {
+    color: #c0c0c0 !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-800 {
+    color: #d0d0d0 !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-900 {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-composer .text-black {
+    color: #ffffff !important;
+  }
+
+  /* Specific text elements in Teams Composer */
+  .dark-theme .teams-composer span {
+    color: inherit;
+  }
+
+  .dark-theme .teams-composer .font-semibold {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-composer .font-medium {
+    color: #b0b0b0 !important;
+  }
+
+       /* Sample buttons should be gray in dark mode */
+  .dark-theme .teams-sample-button {
+    background-color: #6b7280 !important;
+    color: #ffffff !important;
+    border-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-sample-button:hover {
+    background-color: #4b5563 !important;
+  }
+
+  /* Ensure text inside sample buttons is white in dark mode */
+  .dark-theme .teams-sample-button,
+  .dark-theme .teams-sample-button span,
+  .dark-theme .teams-sample-button * {
+    color: #ffffff !important;
+  }
+
+  /* Override any conflicting text color rules for sample buttons */
+  .dark-theme .teams-chat-area button.teams-sample-button {
+    background-color: #6b7280 !important;
+    color: #ffffff !important;
+    border-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-chat-area button.teams-sample-button:hover {
+    background-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-chat-area button.teams-sample-button,
+  .dark-theme .teams-chat-area button.teams-sample-button span,
+  .dark-theme .teams-chat-area button.teams-sample-button * {
+    color: #ffffff !important;
+  }
+
+  /* Force override any inherited text colors */
+  .dark-theme .teams-chat-area .bg-blue-50 {
+    background-color: #6b7280 !important;
+  }
+
+  .dark-theme .teams-chat-area button.bg-blue-50 {
+    background-color: #6b7280 !important;
+    color: #ffffff !important;
+    border-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-chat-area button.bg-blue-50:hover {
+    background-color: #4b5563 !important;
+  }
+
+  /* Force blue text on all elements inside sample buttons */
+  .dark-theme .teams-chat-area button[class*="bg-blue-50"] {
+    background-color: #6b7280 !important;
+    color: #ffffff !important;
+    border-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-chat-area button[class*="bg-blue-50"]:hover {
+    background-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-chat-area button[class*="bg-blue-50"] * {
+    color: #ffffff !important;
+  }
+
+  /* Document Summariser specific dark mode styling */
+  .dark-theme .teams-chat-area .bg-purple-500 {
+    background-color: #8b5cf6 !important;
+  }
+
+  .dark-theme .teams-chat-area .text-white {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-chat-area .hover\:bg-purple-600:hover {
+    background-color: #7c3aed !important;
+  }
+
+  /* Keep upload icon in light mode appearance */
+  .dark-theme .teams-chat-area .bg-purple-50 {
+    background-color: #faf5ff !important;
+  }
+
+  .dark-theme .teams-chat-area .border-purple-200 {
+    border-color: #e9d5ff !important;
+  }
+
+  .dark-theme .teams-chat-area .text-purple-400 {
+    color: #c084fc !important;
+  }
+
+  /* Keep the upload icon circle fill in light mode */
+  .dark-theme .teams-chat-area svg circle[fill="#f3e8ff"] {
+    fill: #f3e8ff !important;
+  }
+
+  /* HomePage dark mode styling */
+  .dark-theme .teams-composer .bg-white\/80 {
+    background-color: #374151 !important;
+  }
+
+  .dark-theme .teams-composer .border-gray-200 {
+    border-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-600 {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-900 {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-composer .text-gray-700 {
+    color: #d1d5db !important;
+  }
+
+  .dark-theme .teams-composer .bg-gray-100 {
+    background-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-composer .hover\:bg-gray-200:hover {
+    background-color: #6b7280 !important;
+  }
+
+   /* Sample buttons should be gray in dark mode - override all blue classes */
+   .dark-theme .bg-blue-50 {
+     background-color: #6b7280 !important;
+   }
+
+   .dark-theme .text-blue-700 {
+     color: #ffffff !important;
+   }
+
+   .dark-theme .border-blue-100 {
+     border-color: #4b5563 !important;
+   }
+
+   .dark-theme .hover\:bg-blue-100:hover {
+     background-color: #4b5563 !important;
+   }
+
+   /* Override any inherited text colors for sample buttons */
+   .dark-theme .teams-chat-area .text-blue-700 {
+     color: #ffffff !important;
+   }
+
+   .dark-theme .teams-chat-area button.text-blue-700 {
+     background-color: #6b7280 !important;
+     color: #ffffff !important;
+     border-color: #4b5563 !important;
+   }
+
+   .dark-theme .teams-chat-area .bg-blue-50 {
+     background-color: #6b7280 !important;
+   }
+
+   .dark-theme .teams-chat-area button.bg-blue-50 {
+     background-color: #6b7280 !important;
+     color: #ffffff !important;
+     border-color: #4b5563 !important;
+   }
+
+   /* Force gray background and white text on all sample buttons */
+   .dark-theme .teams-chat-area button[class*="bg-blue-50"] {
+     background-color: #6b7280 !important;
+     color: #ffffff !important;
+     border-color: #4b5563 !important;
+   }
+
+   .dark-theme .teams-chat-area button[class*="bg-blue-50"] * {
+     color: #ffffff !important;
+   }
+
+     /* Dropdown button should be gray in dark mode */
+  .dark-theme .teams-header .text-blue-800 {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-header .bg-blue-100 {
+    background-color: #6b7280 !important;
+  }
+
+  .dark-theme .teams-header .border-blue-200 {
+    border-color: #4b5563 !important;
+  }
+
+  .dark-theme .teams-header .focus\:ring-blue-300:focus {
+    --tw-ring-color: #9ca3af !important;
+  }
+
+   /* Home button SVG color in dark mode */
+   .dark-theme .teams-header button svg {
+     color: #ffffff !important;
+   }
+
+   .dark-theme .teams-header .w-5.h-5 {
+     color: #ffffff !important;
+   }
+
+     /* Dropdown arrow icon color in dark mode */
+  .dark-theme .teams-header .text-blue-800 svg {
+    color: #ffffff !important;
+  }
+
+  .dark-theme .teams-header button[class*="text-blue-800"] svg {
+    color: #ffffff !important;
+  }
